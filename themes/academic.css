@@ -1,0 +1,176 @@
+/* @theme academic */
+/* 融合 beam 的排版结构与 pascal 的配色体系 */
+
+@import "default";
+
+:root {
+  /* 字体：采用 Pascal 的字体栈 */
+  font-family: 'Bookerly', 'Noto Serif Thai', 'Fira Sans Condensed', sans-serif;
+  
+  /* 主色与辅色（取自 Pascal） */
+  --main: #25478f;      /* 标题蓝 */
+  --secondary: #303155; /* 深灰 */
+  --font-size: 0.6em;
+  
+  /* Pascal 其他颜色变量 */
+  --p-color: rgba(4, 20, 41, 0.814);
+  --bold-color: #e70000;
+  --code-background-color: rgba(206, 252, 0, 0.877);
+  --h1-border-bottom: 1px solid orangered;
+  --background-color: #f5f5f5;
+}
+
+/* ========== 底部彩色条 ========== */
+section {
+  background-color: var(--background-color);
+  /* 使用内联 SVG 替代 Base64，便于调整颜色 */
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='250mm' height='5.3546mm' viewBox='0 0 250 5.3546'><g transform='translate(-20.347 -91.028)'><rect x='20.347' y='91.028' width='125' height='5.3546' fill='%23303155' fill-rule='evenodd' stroke-width='0'/><path d='m145.35 93.705v-2.6773h125v5.3546h-125z' fill='%2325478f' stroke-width='0'/></g></svg>");
+  background-repeat: no-repeat;
+  background-position: center bottom;
+  background-size: 150% 1em;
+  padding: 2em;
+}
+
+/* ========== 页眉 & 页脚 & 页码 ========== */
+header {
+  font-size: var(--font-size);
+  text-align: right;
+  position: absolute;
+  top: 96.2%;
+  width: 100%;
+  right: 0;
+  left: -51%;
+  color: white;
+}
+
+footer {
+  font-size: var(--font-size);
+  position: absolute;
+  text-align: left;
+  top: 96.2%;
+  width: 100%;
+  right: 0;
+  left: 50.8%;
+  color: white;
+}
+
+section::after {
+  font-size: var(--font-size);
+  content: attr(data-marpit-pagination) " / " attr(data-marpit-pagination-total);
+  position: absolute;
+  text-align: right;
+  top: 96.2%;
+  width: 100%;
+  right: 0;
+  left: -0.5em;
+  color: white;
+}
+
+/* ========== 标题 ========== */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--secondary);
+}
+
+/* 第一个 h1（默认作为章节标题，顶部色块） */
+h1:nth-of-type(1) {
+  font-family: 'Fira Sans Condensed', 'Segoe UI Semibold';
+  color: #ffffff;
+  background-color: var(--main);
+  border-top: 0.3em solid var(--main);
+  border-bottom: var(--h1-border-bottom); /* Pascal 风格的分界线 */
+  padding: 0;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 1.5em;
+  text-indent: 0.5em;
+}
+
+/* 非第一个 h1（普通标题，仅带下边框） */
+h1:not(:nth-of-type(1)) {
+  font-family: 'Fira Sans Condensed', 'Segoe UI Semibold';
+  font-weight: 900;
+  color: var(--main);
+  padding-bottom: 2mm;
+  margin-bottom: 10mm;
+  border-bottom: var(--h1-border-bottom);
+}
+
+/* ========== 文本样式 ========== */
+p {
+  font-size: 112%;
+  font-weight: 500;
+  color: var(--p-color);
+  line-height: 112%;
+}
+
+strong {
+  color: var(--bold-color) !important;
+  font-weight: 600;
+}
+
+code {
+  background-color: var(--code-background-color);
+  color: #000;
+  font-weight: 600;
+  padding: 0 0.2em;
+  border-radius: 13pt;
+}
+
+mark {
+  background-color: #f5db7e; /* 保留 Beam 的黄色高亮，也可按需替换 */
+}
+
+/* 行内数学公式 */
+.katex {
+  font: normal 1.05em KaTeX_Main, "Times New Roman", serif;
+}
+
+/* ========== 列表 ========== */
+li {
+  font-size: 22pt !important;
+}
+
+li:hover {
+  background-color: rgba(10, 10, 10, 0.089);
+  color: #fff; /* 悬停时文字变白，提升交互感 */
+}
+
+/* ========== 自定义类（继承自 Beam） ========== */
+/* --- 标题页 (title) --- */
+section.title > h1 {
+  font-family: 'Fira Sans Condensed', 'Segoe UI Semibold';
+  color: #ffffff;
+  background-color: var(--main);
+  border-radius: 25px;
+  text-align: center;
+  top: 25%;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  width: 80%;
+  padding-bottom: 0.2em;
+  height: auto;
+  border-bottom: none;
+}
+
+section.title > p {
+  position: relative;
+  text-align: center;
+  top: 35px;
+}
+
+/* --- 小字号 (tinytext) --- */
+section.tinytext > p,
+section.tinytext > ul,
+section.tinytext > blockquote {
+  font-size: 0.65em;
+}
+
+/* --- 图片居中 (center) --- */
+img[alt~="center"] {
+  display: block;
+  margin: 0 auto;
+}
