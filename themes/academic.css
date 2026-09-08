@@ -14,9 +14,9 @@
   
   /* Pascal 其他颜色变量 */
   --p-color: rgba(4, 20, 41, 0.814);
-  --bold-color: #e70000;
-  --code-background-color: rgba(206, 252, 0, 0.877);
-  --h1-border-bottom: 1px solid orangered;
+  --bold-color: #a94442;
+  --code-background-color: rgba(211, 211, 211, 0.877);
+  --h1-border-bottom: 3px solid rgb(113, 113, 113);
   --background-color: #f5f5f5;
 }
 
@@ -77,7 +77,6 @@ h1:nth-of-type(1) {
   color: #ffffff;
   background-color: var(--main);
   border-top: 0.3em solid var(--main);
-  border-bottom: var(--h1-border-bottom); /* Pascal 风格的分界线 */
   padding: 0;
   position: absolute;
   top: 0;
@@ -95,6 +94,13 @@ h1:not(:nth-of-type(1)) {
   padding-bottom: 2mm;
   margin-bottom: 10mm;
   border-bottom: var(--h1-border-bottom);
+}
+
+h2 {
+  padding: 5px;
+  padding-left: 20px;
+  border-left: 10px solid #25478f;
+  border-bottom: 2px solid #25478f;
 }
 
 /* ========== 文本样式 ========== */
@@ -122,55 +128,300 @@ mark {
   background-color: #f5db7e; /* 保留 Beam 的黄色高亮，也可按需替换 */
 }
 
-/* 行内数学公式 */
+/* ========== 斜体字配色 ========== */
+em, i {
+  color: #6a4f8c;          /* 灰蓝紫，柔和且清晰 */
+  font-style: italic;      /* 保留斜体 */
+}
+
+/* ========== 行内公式（$...$） ========== */
 .katex {
   font: normal 1.05em KaTeX_Main, "Times New Roman", serif;
+  color: #1a1a2e;
+  /* 行内公式可保留轻背景，但需避免影响块级内部 */
+  background: rgba(243, 248, 251, 0.8); /* 或保留，但后续会被覆盖 */
+  padding: 0.1em 0.2em;
+  border-radius: 15px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.07);
 }
 
-/* ========== 列表 ========== */
+/* ========== 块级公式（$$...$$） ========== */
+.katex-display {
+  margin: 1.2em 0;
+  padding: 0.3em 0.6em;
+  background: #f3f8fb;          /* 浅灰蓝 */
+  border-left: 4px solid #002c52;
+  border-radius: 0 8px 8px 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  overflow-x: auto;
+  text-align: center;
+}
+
+/* ===== 覆盖块级容器内部 .katex 的样式 ===== */
+.katex-display .katex {
+  background: transparent !important; /* 继承父级背景，透明 */
+  box-shadow: none !important;        /* 去掉阴影 */
+  padding: 0 !important;              /* 去掉内边距 */
+  margin: 0 !important;              /* 去掉外边距 */
+  border-radius: 0 !important;        /* 去掉圆角 */
+  font-size: inherit;
+}
+
+/* 3. 修复白色背景块：强制内部所有元素背景透明 */
+.katex-display .katex * {
+  background: transparent !important;
+}
+
+/* 块级公式容器基础样式（您已有的） */
+.katex-display {
+  margin: 1.2em 0;
+  padding: 0.3em 0.6em;
+  background: #f3f8fb;
+  border-left: 4px solid #002c52;
+  border-radius: 0 8px 8px 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  overflow-x: auto;
+  text-align: center;
+  transition: background 0.3s, border-color 0.3s, box-shadow 0.3s; /* 平滑过渡 */
+}
+
+/* 悬停效果（无位移） */
+.katex-display:hover {
+  background: #e8f0f7;               /* 略微加深背景 */
+  border-left-color: #0079e2;        /* 边框颜色变亮 */
+  box-shadow: 0 4px 16px rgba(0, 44, 82, 0.12); /* 阴影加深扩散，无位移 */
+}
+
+.katex:hover {
+  background: #e8f0f7;
+  box-shadow: 0 2px 8px rgba(0, 44, 82, 0.08);
+}
+
+/* ========== 列表容器 ========== */
+ul, ol {
+  padding-left: 1.2em;    /* 默认缩进 */
+}
+
+/* ========== 列表项 ========== */
 li {
-  font-size: 22pt !important;
+  position: relative;           /* 为竖线定位 */
+  padding: 8px 16px 8px 24px;   /* 左侧留出竖线和符号空间 */
+  margin: 4px 0;
+  border-radius: 0;             /* 删除圆角 */
+  transition: background 0.25s, box-shadow 0.25s;
+  cursor: default;
+  list-style-position: inside;  /* 让 ::marker 进入内容区，位于竖线右侧 */
 }
 
-li:hover {
-  background-color: rgba(10, 10, 10, 0.089);
-  color: #fff; /* 悬停时文字变白，提升交互感 */
-}
-
-/* ========== 自定义类（继承自 Beam） ========== */
-/* --- 标题页 (title) --- */
-section.title > h1 {
-  font-family: 'Fira Sans Condensed', 'Segoe UI Semibold';
-  color: #ffffff;
-  background-color: var(--main);
-  border-radius: 25px;
-  text-align: center;
-  top: 25%;
+/* ===== 左侧竖线（伪元素） ===== */
+li::before {
+  content: '';
+  position: absolute;
   left: 0;
-  right: 0;
-  margin-left: auto;
-  margin-right: auto;
-  width: 80%;
-  padding-bottom: 0.2em;
-  height: auto;
-  border-bottom: none;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background-color: #002c52;
+  transform: scaleY(0);         /* 初始隐藏 */
+  transform-origin: center;     /* 从中间向上下伸展 */
+  transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
-section.title > p {
-  position: relative;
-  text-align: center;
-  top: 35px;
+/* ===== 悬停效果 ===== */
+li:hover {
+  background-color: rgba(0, 44, 82, 0.06);
+  box-shadow: 0 2px 12px rgba(0, 44, 82, 0.08);
+  text-shadow: 0 0 0.5px currentColor; /* 模拟加粗 */
 }
 
-/* --- 小字号 (tinytext) --- */
-section.tinytext > p,
-section.tinytext > ul,
-section.tinytext > blockquote {
-  font-size: 0.65em;
+li:hover::before {
+  transform: scaleY(1);         /* 竖线从中间向上下伸长到全高 */
 }
 
 /* --- 图片居中 (center) --- */
 img[alt~="center"] {
   display: block;
   margin: 0 auto;
+}
+
+blockquote {
+  background: linear-gradient(135deg, #ffffff 0%, #f8faff 100%);
+  border: 1px solid rgba(37, 71, 143, 0.2);
+  border-left: 6px solid #25478f;
+  border-radius: 16px;
+  padding: 0.6em 1em;
+  margin: 1.5em 0;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+  color: var(--p-color, rgba(4, 20, 41, 0.814));
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  transform: translateY(0);
+}
+
+blockquote p {
+  margin: 0.3em 0;
+  font-size: 1em;
+  font-weight: 400;
+}
+
+/* 加粗引用内的文字用主蓝色 */
+blockquote strong {
+  color: #9b7bb8 !important;
+}
+
+blockquote cite {
+  display: block;
+  text-align: right;
+  font-size: 0.7em;
+  margin-top: 0.8em;
+  color: #666;
+}
+
+blockquote:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  background: rgba(238, 243, 255, 0.1);
+  cursor: pointer;
+}
+
+
+
+/* ========== 表格美化 ========== */
+table {
+  width: auto;                     /* 宽度由内容决定 */
+  max-width: 100%;                 /* 防止溢出父容器 */
+  border-collapse: collapse;
+  margin: 1.5em auto;              /* 上下边距，左右居中 */
+  font-size: 0.9em;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  /* 让表格成为块级但宽度自适应，配合 margin auto 居中 */
+  display: table;                  /* 保持表格布局 */
+}
+
+/* 表头 */
+thead tr {
+  background-color: var(--main, #25478f);
+  color: white;
+  text-align: left;
+  font-weight: 600;
+}
+
+thead th {
+  padding: 14px 18px;
+  font-family: 'Fira Sans Condensed', 'Segoe UI Semibold', sans-serif;
+  letter-spacing: 0.5px;
+  font-size: 0.95em;
+}
+
+/* 表体 */
+tbody tr {
+  border-bottom: 1px solid #e6ecf5;
+  transition: background 0.2s;
+}
+
+/* 偶数行浅灰背景 */
+tbody tr:nth-of-type(even) {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+/* 悬停行高亮 */
+tbody tr:hover {
+  background-color: rgba(37, 71, 143, 0.06);
+}
+
+tbody td {
+  padding: 12px 18px;
+  color: var(--p-color, rgba(4, 20, 41, 0.814));
+  line-height: 1.5;
+}
+
+/* 表格内加粗、斜体继承主题配色 */
+tbody td strong {
+  color: var(--bold-color, #a94442);
+}
+tbody td em {
+  color: #6a4f8c;   /* 与斜体配色一致 */
+}
+
+/* 表格标题（caption）可选 */
+caption {
+  caption-side: bottom;
+  text-align: center;
+  padding: 0.5em 0;
+  font-size: 0.85em;
+  color: #6b7a8f;
+  letter-spacing: 0.3px;
+}
+
+
+
+
+
+
+
+/* ========== 末页样式（class="end"） ========== */
+
+/* 适用场景：最后一页，如感谢、结束语、联系方式等 */
+section.end {
+  /* 使用主题主色作为背景，与首页标题块呼应 */
+  background-color: var(--main);        /* #25478f */
+  /* 移除底部彩色条 */
+  background-image: none !important;
+  /* 使用 Flex 布局让内容垂直水平居中 */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: white;
+  padding: 2em;
+  /* 可选：添加微妙的纹理或渐变 */
+  /* background: radial-gradient(circle at 30% 40%, rgba(255,255,255,0.05) 0%, var(--main) 80%); */
+}
+
+/* 隐藏页眉、页脚、页码（避免干扰） */
+section.end header,
+section.end footer,
+section.end::after {
+  display: none !important;
+}
+
+/* 末页主标题（如“谢谢”） */
+section.end h1 {
+  font-family: 'Fira Sans Condensed', 'Segoe UI Semibold', sans-serif;
+  font-size: 4.5em;
+  font-weight: 700;
+  color: white;
+  margin: 0;
+  padding: 0;
+  background: none !important;   /* 去掉默认的顶部色块 */
+  border: none !important;
+  position: static;              /* 脱离绝对定位 */
+  text-indent: 0;
+  letter-spacing: 0.05em;
+  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* 末页副标题或详细信息 */
+section.end p {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 1.2em;
+  font-weight: 300;
+  margin-top: 0.5em;
+  max-width: 70%;
+  line-height: 1.6;
+}
+
+/* 如果有加粗，用辅色（例如金色或浅蓝） */
+section.end strong {
+  color: #ffd966 !important;   /* 淡金色，与深蓝背景搭配 */
+  font-weight: 600;
+}
+
+/* 可选：为末页底部添加一条细分割线（装饰） */
+section.end hr {
+  width: 10%;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  margin: 1.5em auto;
 }
